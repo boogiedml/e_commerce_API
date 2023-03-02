@@ -16,6 +16,7 @@ const __dirname = path.dirname(import.meta.url);
 
 const app = express();
 const apiRoute = "/api/v1";
+const port = process.env.PORT || 1001;
 
 // Middleware
 app.use(express.json());
@@ -32,6 +33,6 @@ app.use(`${apiRoute}/orders`, orderRouter);
 
 connectDB(process.env.CONNECTON_STRING);
 
-app.listen(1001, () => {
+app.listen(port, () => {
   console.log("Connection Started");
 });
