@@ -22,9 +22,6 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(verifyJwt);
-app.use("/public/uploads/", express.static(__dirname + "/public/uploads/"));
-console.log(express.static(__dirname + "/public/uploads/"));
-// app.use(express.static(path.join(__dirname, "/public/uploads")));
 app.use(errorHandler);
 
 // Routes
