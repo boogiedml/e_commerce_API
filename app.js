@@ -35,7 +35,7 @@ app.use(`${apiRoute}/orders`, orderRouter);
 
 connectDB(process.env.CONNECTON_STRING);
 
-const port = process.env.PORT || 1001
+const port = 1001
 
 app.listen(port, () => {
   console.log("Connection Started");
