@@ -12,11 +12,11 @@ import verifyJwt from "./helpers/jwt.js";
 import errorHandler from "./helpers/error-handler.js";
 
 dotenv.config();
-const __dirname = path.dirname(import.meta.url);
+// const __dirname = path.dirname(import.meta.url);
 
 const app = express();
 const apiRoute = "/api/v1";
-const port = process.env.PORT || 1001;
+const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
