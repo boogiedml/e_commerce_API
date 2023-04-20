@@ -22,6 +22,14 @@ export const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
+  zip: {
+    type: Boolean,
+    default: false,
+  },
   street: {
     type: String,
     default: "",
