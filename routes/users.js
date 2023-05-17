@@ -7,7 +7,6 @@ import {
   getTotalNumberOfUsers,
   deleteUser,
   updateUser,
-  // emailVerification,
 } from "../controllers/users.js";
 
 const userRouter = express.Router();
@@ -32,8 +31,5 @@ userRouter.route("/get/count").get(getTotalNumberOfUsers);
 
 // Delete User
 userRouter.route("/:id").delete(deleteUser);
-
-// Verify User
-// userRouter.route("/verify/:id").delete(emailVerification);
 
 export default userRouter;

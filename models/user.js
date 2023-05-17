@@ -26,6 +26,9 @@ export const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  verificationToken: {
+    type: String,
+  },
   zip: {
     type: Boolean,
     default: false,

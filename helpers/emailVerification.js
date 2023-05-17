@@ -16,7 +16,7 @@ const sendVerificationEmail = async (name, email, verificationLink) => {
     let info = await transporter.sendMail({
       from: "isholasherifdeen@gmail.com",
       // to: email,
-      to: "isholasherifdeen30@gmail.com",
+      to: email,
       subject: "Email Verification",
       text: "Hello world?",
       html: `

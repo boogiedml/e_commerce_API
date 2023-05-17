@@ -10,13 +10,14 @@ import userRouter from "./routes/users.js";
 import orderRouter from "./routes/orders.js";
 import verifyJwt from "./helpers/jwt.js";
 import errorHandler from "./helpers/error-handler.js";
+import authRouter from "./routes/auth.js";
 
 dotenv.config();
 // const __dirname = path.dirname(import.meta.url);
 
 const app = express();
 const apiRoute = "/api/v1";
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8000;
 
 // Middleware
 app.use(express.json());
@@ -29,6 +30,7 @@ app.use(errorHandler);
 app.use(`${apiRoute}/products`, productsRouter);
 app.use(`${apiRoute}/categories`, categoryRouter);
 app.use(`${apiRoute}/users`, userRouter);
+app.use(`${apiRoute}/auth`, authRouter);
 app.use(`${apiRoute}/orders`, orderRouter);
 
 connectDB(process.env.CONNECTON_STRING);

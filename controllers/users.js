@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { sendVerificationEmail } from "../helpers/emailVerification.js";
 import User from "../models/user.js";
+import cryptoRandomString from "crypto-random-string";
 
 const getAllUsers = async (req, res) => {
   const userList = await User.find({}).select("-passwordHash -__v");
@@ -15,11 +16,16 @@ const getUser = async (req, res) => {
   const user = await User.findById(req.params.id).select("-passwordHash -__v");
 
   if (!user)
-    res.status(500).json({ success: false, message: "Cannot fetch user" });
+    res.status(404).json({ success: false, message: "User not found!" });
   res.json({ success: true, user });
 };
 
 const addUser = async (req, res) => {
+  const verificationToken = cryptoRandomString({
+    length: 24,
+    type: "base64",
+  });
+
   try {
     const user = new User({
       name: req.body.name,
@@ -32,11 +38,12 @@ const addUser = async (req, res) => {
       zip: req.body.zip,
       city: req.body.city,
       country: req.body.country,
+      verificationToken: verificationToken,
     });
 
     const newUser = await user.save();
 
-    const verificationLink = `${process.env.BASE_URL}verify-email/${newUser.id}`;
+    const verificationLink = `${process.env.BASE_URL}verify-email?token=${verificationToken}`;
 
     await sendVerificationEmail(newUser.name, newUser.email, verificationLink);
 
@@ -156,9 +163,7 @@ const deleteUser = async (req, res) => {
   await User.findByIdAndDelete(req.params.id)
     .then((user) => {
       if (user) {
-        return res
-          .status(200)
-          .json({ success: true, message: "User is deleted successfully" });
+        return res.status(204).send();
       } else {
         return res
           .status(404)
@@ -169,37 +174,6 @@ const deleteUser = async (req, res) => {
       res.status(400).json({ error: true, data: err, success: false });
     });
 };
-
-// const verifyEmail = async (req, res) => {
-//   try {
-//     const { verificationCode } = req.params;
-
-//     // Find the verification object associated with the code
-//     const verification = await Verification.findOne({ code: verificationCode });
-
-//     if (!verification) {
-//       throw Error("Invalid verification code");
-//     }
-
-//     // Update the user's isVerified field to true
-//     const user = await User.findOneAndUpdate(
-//       { email: verification.email },
-//       { isVerified: true },
-//       { new: true }
-//     );
-
-//     if (!user) {
-//       throw Error("User not found");
-//     }
-
-//     // Delete the verification object
-//     await Verification.findOneAndDelete({ code: verificationCode });
-
-//     res.status(200).json({ message: "Email verified successfully" });
-//   } catch (error) {
-//     res.status(400).json({ error: error.message });
-//   }
-// };
 
 export {
   getAllUsers,
