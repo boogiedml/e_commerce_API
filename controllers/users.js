@@ -5,7 +5,9 @@ import User from "../models/user.js";
 import cryptoRandomString from "crypto-random-string";
 
 const getAllUsers = async (req, res) => {
-  const userList = await User.find({}).select("-passwordHash -__v");
+  const userList = await User.find({}).select(
+    "-passwordHash -__v -verificationToken"
+  );
 
   if (!userList)
     res.status(500).json({ success: false, message: "Cannot fetch users" });
@@ -23,7 +25,7 @@ const getUser = async (req, res) => {
 const addUser = async (req, res) => {
   const verificationToken = cryptoRandomString({
     length: 24,
-    type: "base64",
+    type: "url-safe",
   });
 
   try {
@@ -43,7 +45,7 @@ const addUser = async (req, res) => {
 
     const newUser = await user.save();
 
-    const verificationLink = `${process.env.BASE_URL}verify-email?token=${verificationToken}`;
+    const verificationLink = `${process.env.BASE_URL}verify-email/${verificationToken}`;
 
     await sendVerificationEmail(newUser.name, newUser.email, verificationLink);
 

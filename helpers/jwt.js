@@ -1,13 +1,5 @@
 import jwt from "jsonwebtoken";
-// import { expressjwt } from "express-jwt";
 
-// function authJwt() {
-//   const secret = process.env.SECRET_KEY;
-//   return expressjwt({
-//     secret,
-//     algorithms: ["HS256"],
-//   });
-// }
 const apiRoute = "/api/v1";
 
 const verifyJwt = (req, res, next) => {
@@ -16,6 +8,8 @@ const verifyJwt = (req, res, next) => {
     `${apiRoute}/users/login`,
     `${apiRoute}/users/signup`,
     `${apiRoute}/auth/verify-email`,
+    `${apiRoute}/auth/request-password-reset`,
+    `${apiRoute}/auth/reset-password`,
     `${apiRoute}/products`,
     `${apiRoute}/products/get/featured`,
     `${apiRoute}/products/get/count`,
@@ -34,20 +28,26 @@ const verifyJwt = (req, res, next) => {
 
     jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
       if (err) {
-        res.status(403).json({ error: true, message: "Token is invalid" });
+        res
+          .status(403)
+          .json({ error: true, message: "Token is invalid", code: 403 });
       } else {
         req.user = user;
         if (!user.isAdmin) {
-          res
-            .status(403)
-            .json({ error: true, message: "User is not authorized" });
+          res.status(403).json({
+            error: true,
+            message: "User is not authorized",
+            code: 403,
+          });
         } else {
           next();
         }
       }
     });
   } else {
-    res.status(401).json({ error: true, message: "Token is missing" });
+    res
+      .status(401)
+      .json({ error: true, message: "Token is missing", code: 401 });
   }
 };
 

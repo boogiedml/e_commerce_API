@@ -1,9 +1,15 @@
 import express from "express";
-import { verifyEmail } from "../controllers/auth.js";
+import {
+  forgotPassword,
+  resetPassword,
+  verifyEmail,
+} from "../controllers/auth.js";
 
 const authRouter = express.Router();
 
 // Verify User
-authRouter.route("/verify-email").get(verifyEmail);
+authRouter.route("/verify-email/:verificationToken").get(verifyEmail);
+authRouter.route("/request-password-reset").post(forgotPassword);
+authRouter.route("/reset-password").post(resetPassword);
 
 export default authRouter;
