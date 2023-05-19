@@ -11,7 +11,7 @@ const getAllUsers = async (req, res) => {
 
   if (!userList)
     res.status(500).json({ success: false, message: "Cannot fetch users" });
-  res.json({ success: true, userList });
+  res.status(200).json({ success: true, userList, code: 200 });
 };
 
 const getUser = async (req, res) => {
@@ -19,13 +19,13 @@ const getUser = async (req, res) => {
 
   if (!user)
     res.status(404).json({ success: false, message: "User not found!" });
-  res.json({ success: true, user });
+  res.status(200).json({ success: true, user, code: 200 });
 };
 
 const addUser = async (req, res) => {
   const verificationToken = cryptoRandomString({
     length: 24,
-    type: "url-safe",
+    type: "base64",
   });
 
   try {
@@ -63,6 +63,7 @@ const addUser = async (req, res) => {
         city: newUser.city,
         country: newUser.country,
       },
+      code: 201,
       message: "Account Created, Proceed to verify your email",
     });
   } catch (error) {
@@ -108,6 +109,7 @@ const authenticateUser = async (req, res) => {
         isAdmin: user.isAdmin,
         token: token,
       },
+      code: 200,
       message: "User Authenticated",
     });
   } else {
@@ -142,8 +144,10 @@ const updateUser = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    res.status(201).json({
       success: true,
+      data: {},
+      code: 201,
       message: "User updated successfully",
     });
   } catch (error) {

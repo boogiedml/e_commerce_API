@@ -1,4 +1,5 @@
 import cryptoRandomString from "crypto-random-string";
+import bcrypt from "bcrypt";
 import { sendPasswordResetEmail } from "../helpers/emailVerification.js";
 import User from "../models/user.js";
 
@@ -44,7 +45,7 @@ const forgotPassword = async (req, res) => {
 
     const resetToken = cryptoRandomString({
       length: 24,
-      type: "url-safe",
+      type: "base64",
     });
 
     // Set the password reset token

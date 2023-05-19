@@ -11,6 +11,7 @@ import orderRouter from "./routes/orders.js";
 import verifyJwt from "./helpers/jwt.js";
 import errorHandler from "./helpers/error-handler.js";
 import authRouter from "./routes/auth.js";
+import { resetPassword } from "./controllers/auth.js";
 
 dotenv.config();
 // const __dirname = path.dirname(import.meta.url);
